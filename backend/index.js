@@ -3,6 +3,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require("cors");
 const { authRoutes } = require('./routes/authRoutes');
+const { taskRoutes } = require('./routes/taskRoutes');
+const { listRoutes } = require('./routes/listRoutes');
 
 dotenv.config();
 const app = express();
@@ -16,3 +18,5 @@ app.listen(PORT, () => {
 });
 
 app.use('/auth', authRoutes); // Mount authentication routes
+app.use('/api', taskRoutes);
+app.use('/api', listRoutes);
