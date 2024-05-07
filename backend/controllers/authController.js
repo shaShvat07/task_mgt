@@ -1,16 +1,16 @@
 const bcrypt = require("bcrypt");
 const { pool } = require('../config/dbConfig');
-const { signToken } = require('../config/jwtConfig');
+const jwt = require('jsonwebtoken');
 
 //Register
 async function register(req, res) {
   try {
-    const { username, email, password } = req.body;
+    const { first_name, last_name, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await pool.query(
-      "INSERT INTO users (username, email, password) VALUES ($1, $2, $3) RETURNING *",
-      [username, email, hashedPassword]
+      "INSERT INTO users (first_name, last_name, email, password) VALUES ($1, $2, $3, $4) RETURNING *",
+      [first_name, last_name, email, hashedPassword]
     );    
 
     res.status(201).json(result.rows[0]);
@@ -38,9 +38,9 @@ async function login(req, res) {
     if (!isPasswordMatch) {
       return res.status(400).json({ message: "Invalid Credentials" });
     }
-
-    const token = signToken({ userId: user.id });
-
+    const token = jwt.sign({ user: user }, process.env.SECRET_KEY,{
+      expiresIn: "1h"
+    });
     res.json({ token });
   } catch (error) {
     console.error(error);
