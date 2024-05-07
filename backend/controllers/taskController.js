@@ -1,11 +1,19 @@
 const TaskService = require('../services/taskServices');
+const UserService = require('../services/userServices');
+const ListService = require('../services/listServices');
 
 // Create a new task
 exports.createTask = async (req, res) => {
     try {
-        const { list_id, content, priority, status, deadline } = req.body;
-        const user_id = req.data.user.user_id; 
+        const { content, priority, status, deadline } = req.body;
+        const list_id = req.params.listId; // Extract list ID from URL parameters
+        const user_id = req.data.user.user_id;
         const task = await TaskService.createTask(list_id, user_id, content, priority, status, deadline);
+        // Update user's array of task IDs
+        await UserService.addTaskToUser(user_id, task.task_id);
+
+        // Update list's array of task IDs
+        await ListService.addTaskToList(list_id, task.task_id);
         res.status(201).json(task);
     } catch (error) {
         console.error(error);
@@ -17,8 +25,12 @@ exports.createTask = async (req, res) => {
 exports.getTaskById = async (req, res) => {
     try {
         const taskId = req.params.taskId;
+        const list_id = req.params.listId;
         const task = await TaskService.getTaskById(taskId);
         if (!task) {
+            return res.status(404).json({ message: "Task not found" });
+        }
+        if (task.list_id !== list_id) {
             return res.status(404).json({ message: "Task not found" });
         }
         res.json(task);

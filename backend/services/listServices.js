@@ -39,3 +39,10 @@ exports.deleteList = async (listId) => {
     const { rows } = await pool.query(query, values);
     return rows[0];
 };
+
+// Add a task ID to the list's array of task IDs
+exports.addTaskToList = async (listId, taskId) => {
+    const query = 'UPDATE lists SET tasks = array_append(tasks, $1) WHERE list_id = $2';
+    const values = [taskId, listId];
+    await pool.query(query, values);
+};

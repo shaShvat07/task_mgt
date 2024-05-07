@@ -17,6 +17,6 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-app.use('/auth', authRoutes); // Mount authentication routes
-app.use('/api', taskRoutes);
-app.use('/api', listRoutes);
+app.use('/', authRoutes); // Mount authentication routes
+app.use('/:userId', taskRoutes);
+app.use('/:userId', listRoutes);
