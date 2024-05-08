@@ -5,6 +5,7 @@ const cors = require("cors");
 const { authRoutes } = require('./routes/authRoutes');
 const { taskRoutes } = require('./routes/taskRoutes');
 const { listRoutes } = require('./routes/listRoutes');
+const { userRoutes } = require('./routes/userRoutes');
 
 dotenv.config();
 const app = express();
@@ -17,6 +18,7 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
-app.use('/', authRoutes); // Mount authentication routes
-app.use('/:userId', taskRoutes);
-app.use('/:userId', listRoutes);
+app.use('/', authRoutes); 
+app.use('/', userRoutes);
+app.use('/', taskRoutes);
+app.use('/', listRoutes);

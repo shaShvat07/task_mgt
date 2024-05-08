@@ -46,3 +46,10 @@ exports.addTaskToList = async (listId, taskId) => {
     const values = [taskId, listId];
     await pool.query(query, values);
 };
+
+// Remove a task ID from the user's array of task IDs
+exports.removeTaskFromList = async (listId, taskId) => {
+    const query = 'UPDATE lists SET tasks = array_remove(tasks, $1) WHERE list_id = $2';
+    const values = [taskId, listId];
+    await pool.query(query, values);
+};
