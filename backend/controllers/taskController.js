@@ -6,11 +6,6 @@ const ListService = require('../services/listServices');
 exports.createTask = async (req, res) => {
     try {
         const user_id = req.data.user.user_id;
-        const url_user_id = req.params.userId;
-        if (user_id != url_user_id) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
         const { content, priority, deadline } = req.body;
         const list_id = req.params.listId;
         const list = await ListService.getListById(list_id);
@@ -54,11 +49,6 @@ exports.getAllTask = async (req, res) => {
     try {
         const list_id = req.params.listId;
         const user_id = req.data.user.user_id;
-        const url_user_id = req.params.userId;
-        if (user_id != url_user_id) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
         const list = await ListService.getListById(list_id);
 
         if (!list) {
@@ -89,11 +79,7 @@ exports.getTaskById = async (req, res) => {
     try {
         const taskId = req.params.taskId;
         const list_id = req.params.listId;
-        const user_id = req.params.userId;
-        const url_user_id = req.params.userId;
-        if (user_id != url_user_id) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
+        const user_id = req.data.user.user_id;
         const task = await TaskService.getTaskById(taskId);
         if (!task) {
             return res.status(404).json({ message: "Task not found" });
@@ -114,12 +100,7 @@ exports.getTaskById = async (req, res) => {
 // Update a task
 exports.updateTask = async (req, res) => {
     try {
-        const user_id = req.params.userId;
-        const url_user_id = req.params.userId;
-        if (user_id != url_user_id) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
+        const user_id = req.data.user.user_id;
         const list_id = req.params.listId;
         const taskId = req.params.taskId;
         const task = await TaskService.getTaskById(taskId);
@@ -154,8 +135,8 @@ exports.updateTask = async (req, res) => {
         }
 
         // Check if status is a boolean or null
-        if (status && typeof status !== 'boolean') {
-            return res.status(400).json({ message: "Invalid status value. Status must be a boolean or null." });
+        if (!status && typeof status !== 'boolean') {
+            return res.status(400).json({ message: "Invalid status value. Status must be a non-null boolean value ." });
         }
 
         const updatedTask = await TaskService.updateTask(taskId, content, priority, status, deadline);
@@ -169,11 +150,7 @@ exports.updateTask = async (req, res) => {
 // Delete a task
 exports.deleteTask = async (req, res) => {
     try {
-        const user_id = req.params.userId;
-        const url_user_id = req.params.userId;
-        if (user_id != url_user_id) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
+        const user_id = req.data.user.user_id;
         const taskId = req.params.taskId;
         const list_id = req.params.listId;
         const task = await TaskService.getTaskById(taskId);

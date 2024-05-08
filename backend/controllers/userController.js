@@ -2,7 +2,7 @@ const UserService = require('../services/userServices');
 
 // Get a list by ID
 exports.getUserById = async (req, res) => {
-    const userId = req.params.userId;
+    const userId = req.data.user.user_id;
     try {
         // Fetch user data from the database using the provided userId
         const user = await UserService.getUserById(userId);

@@ -4,24 +4,15 @@ const TaskService = require('../services/taskServices');
 // Create a new list
 exports.createList = async (req, res) => {
     try {
-        //user validation check
-        const url_user_id = req.params.userId;
         const user_id = req.data.user.user_id;
-        if (user_id != url_user_id) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
         // Validate title field
         const { title } = req.body;
         if (!title || typeof title !== 'string' || title.length === 0 || title.length > 100) {
             return res.status(400).json({ message: "Title must be a non-empty string with maximum 100 characters" });
         }
-
         const list = await ListService.createList(user_id, title);
-
         // Update user's array of task IDs
         await UserService.addListToUser(user_id, list.list_id);
-
         res.status(201).json(list);
     } catch (error) {
         console.error(error);
@@ -32,13 +23,7 @@ exports.createList = async (req, res) => {
 // Get all lists for a user
 exports.getAllListsByUserId = async (req, res) => {
     try {
-        //user validation check
-        const url_user_id = req.params.userId;
         const user_id = req.data.user.user_id;
-        if (user_id != url_user_id) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
         const lists = await ListService.getAllListsByUserId(user_id);
         res.json(lists);
     } catch (error) {
@@ -50,12 +35,7 @@ exports.getAllListsByUserId = async (req, res) => {
 // Get a list by ID
 exports.getListById = async (req, res) => {
     try {
-        //user validation check
-        const url_user_id = req.params.userId;
         const user_id = req.data.user.user_id;
-        if (user_id != url_user_id) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
         const listId = req.params.listId;
         const list = await ListService.getListById(listId);
         if (!list) {
@@ -74,13 +54,7 @@ exports.getListById = async (req, res) => {
 // Update a list
 exports.updateList = async (req, res) => {
     try {
-        //user validation check
-        const url_user_id = req.params.userId;
         const user_id = req.data.user.user_id;
-        if (user_id != url_user_id) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
         const listId = req.params.listId;
         const { title } = req.body;
         const list = await ListService.updateList(listId, title);
@@ -100,12 +74,7 @@ exports.updateList = async (req, res) => {
 // Delete a list
 exports.deleteList = async (req, res) => {
     try {
-        const url_user_id = req.params.userId;
         const user_id = req.data.user.user_id;
-        if (user_id != url_user_id) {
-            return res.status(401).json({ message: "Unauthorized" });
-        }
-
         const listId = req.params.listId;
         const list = await ListService.getListById(listId);
         if (!list) {
@@ -117,7 +86,7 @@ exports.deleteList = async (req, res) => {
         }
         await UserService.removeListFromUser(user_id, listId);
         // Delete each task associated with the list
-        if(list.tasks){
+        if (list.tasks) {
             for (const taskId of list.tasks) {
                 await UserService.removeTaskFromUser(user_id, taskId);
                 await TaskService.deleteTask(taskId);
