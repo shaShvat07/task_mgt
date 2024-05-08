@@ -1,6 +1,5 @@
 const { pool } = require('../config/dbConfig');
 
-
 // Get user by ID
 exports.getUserById = async (userId) => {
     try {

@@ -115,11 +115,13 @@ exports.deleteList = async (req, res) => {
         if (user_id != list.user_id) {
             return res.status(401).json({ message: "Unauthorized" });
         }
-        await UserService.removeListFromUser(listId);
+        await UserService.removeListFromUser(user_id, listId);
         // Delete each task associated with the list
-        for (const taskId of list.tasks) {
-            await UserService.removeTaskFromUser(taskId);
-            await TaskService.deleteTask(taskId);
+        if(list.tasks){
+            for (const taskId of list.tasks) {
+                await UserService.removeTaskFromUser(user_id, taskId);
+                await TaskService.deleteTask(taskId);
+            }
         }
 
         const Deletedlist = await ListService.deleteList(listId);
