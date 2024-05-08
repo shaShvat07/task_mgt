@@ -1,8 +1,13 @@
 import React from 'react'
+import LandingPage from '../LandingPage/LandingPage';
+import Dashboard from '../Dashboard/Dashboard';
 
 const Home = () => {
+  const Auth = true;
   return (
-    <div>Home</div>
+    <>
+      {Auth ? <Dashboard /> : <LandingPage />}
+    </>
   )
 }
 
