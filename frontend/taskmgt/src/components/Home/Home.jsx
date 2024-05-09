@@ -3,7 +3,7 @@ import LandingPage from '../LandingPage/LandingPage';
 import Dashboard from '../Dashboard/Dashboard';
 
 const Home = () => {
-  const Auth = false;
+  const Auth = true;
   const [bgColor, setBgColor] = useState('bg-white');
   const handleButton1Hover = () => {
     setBgColor('bg-fuchsia-500');
