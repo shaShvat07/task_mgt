@@ -3,7 +3,7 @@ import LandingPage from '../LandingPage/LandingPage';
 import Dashboard from '../Dashboard/Dashboard';
 
 const Home = () => {
-  const Auth = true;
+  const Auth = false;
   return (
     <>
       {Auth ? <Dashboard /> : <LandingPage />}
