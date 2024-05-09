@@ -14,10 +14,10 @@ const Home = () => {
   };
 
   return (
-    <div className='h-full'>
+    <div  className='h-full'>
       {Auth ? <Dashboard /> :
         <>
-          <div className={`w-full ${bgColor}  h-16 flex text-2xl`}>
+          <div className={`w-full ${bgColor} h-16 flex text-2xl`}>
             <a
               className="w-1/2 flex justify-end items-center pr-5 hover:cursor-pointer"
               onMouseEnter={handleButton1Hover}
