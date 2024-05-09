@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 function Modal({ onClose }) {
     return (
-        <div className="fixed inset-0 flex justify-end h-12 mt-20 mr-5">
-            <button onClick={onClose} className="bg-red-500 flex items-center hover:bg-red-600 text-white text-xl py-4 px-4 rounded">Sign Out</button>
+        <div className="absolute inset-0 flex justify-end h-12 mt-20 mr-5 z-10">
+            <button onClick={onClose} className="bg-red-500 flex items-center hover:bg-red-600 text-white text-xl py-4 px-4 rounded ">Sign Out</button>
         </div>
     );
 }
