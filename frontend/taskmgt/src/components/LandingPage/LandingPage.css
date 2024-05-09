@@ -1,0 +1,66 @@
+:root {
+    --c1: rgb(17 24 39);
+    --c2: rgb(37 99 235);
+    --left-color: var(--c1);
+    --right-color: var(--c2);
+  } 
+  .side {
+    display: grid;
+    height: calc(100% - 4rem);
+    overflow: hidden;
+    place-items: center;
+    position: absolute;
+    width: 100%;
+  }
+  
+  .side .title {
+    font-family: "Montserrat", sans-serif;
+    font-size: 7vw;
+    font-weight: 800;
+    margin: 0px 15vw;
+    width: 90vw;
+  }
+  
+  .side .fancy {
+    font-family: "Permanent Marker", cursive;
+    font-size: 1.5em;
+    line-height: 0.6em;
+    margin-left: 2rem;
+  }
+  
+  @media (max-width: 768px) { /* Tablet and mobile devices */
+    .side .title {
+      font-size: 10vw; /* Adjusted font size */
+    }
+  
+    .side .fancy {
+      font-size: 1em; /* Adjusted font size */
+      margin-left: 0.5rem;
+    }
+  }
+
+  #left-side {
+    background-color: var(--left-color);
+    width: 60%;
+    z-index: 2;
+  }
+  
+  #left-side .title {  
+    color: white;  
+  }
+  
+  #left-side .fancy {
+    color: var(--right-color);
+  }
+  
+  #right-side {
+    background-color: var(--right-color);
+  }
+  
+  #right-side .title {
+    color: var(--left-color);
+  }
+  
+  #right-side .fancy {
+    color: white;
+  }

@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
 ::-webkit-scrollbar {
   width: 7px;
@@ -15,4 +14,6 @@
 
 body{
   background-color: rgb(17 24 39);
+  min-height: 100vh;
+  height: 100vh;
 }
