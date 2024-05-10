@@ -17,7 +17,7 @@ function App() {
             />
           </div>
         <Routes >
-          <Route index element={<Home />} />
+          <Route path="/" index element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<SignUp />} />
           <Route path="*" element={<PageNotFound />} />
