@@ -19,7 +19,7 @@ function ListItem({ label, imgSrc }) {
 const Sidebar = () => {
     return (
         <>
-            <div className='sticky w-1/5 left-0 h-100vh top-0 border-r border-gray-500'>
+            <div className='sticky lg:w-1/5 left-0 h-100vh top-0 border-r border-gray-500'>
                 <div className='h-16 flex items-center justify-center'>
                     <img src='/taskmgt_logo.png' className='w-12 h-12' />
                     <div className='ml-2 text-3xl'>
