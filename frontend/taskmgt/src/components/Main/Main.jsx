@@ -1,7 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, TaskModal } from '..';
+import axios from 'axios';
 
 const Main = () => {
+  const [tasks, setTasks] = useState([]);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Fetch all tasks
+      axios.get('http://localhost:3000/mytask/tasks', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          setTasks(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching tasks:', error);
+        });
+    }
+  }, []);
+
+  console.log(tasks);
   const [isActionsDropdownOpen, setIsActionsDropdownOpen] = useState(false);
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
 
@@ -18,8 +40,7 @@ const Main = () => {
   return (
     <>
       <div className='h-full w-full overflow-y-scroll'>
-      <TaskModal showModal={showModal} setShowModal={setShowModal} />
-
+        <TaskModal showModal={showModal} setShowModal={setShowModal} />
         <section class="flex items-start mt-5">
           <div class="max-w-screen-xl px-4 mx-auto lg:px-12 w-full">
             <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
@@ -182,15 +203,10 @@ const Main = () => {
           </div>
         </section>
 
-        <div className='mb-20 w-full relative flex justify-evenly items-start flex-wrap' style={{height: 'fit-content'}}>
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+        <div className='mb-20 w-full relative flex justify-evenly items-start flex-wrap' style={{ height: 'fit-content' }}>
+          {tasks && tasks.length > 0 && tasks.map(item => (
+            <Card item={item} />
+          ))}
         </div>
       </div >
     </>

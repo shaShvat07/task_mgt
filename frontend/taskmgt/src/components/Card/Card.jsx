@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { UpdateTaskModal } from '..';
 
-const Card = () => {
+const Card = ({item}) => {
+    console.log(item);
     const [showModal, setShowModal] = useState(false);
     return (
         <>

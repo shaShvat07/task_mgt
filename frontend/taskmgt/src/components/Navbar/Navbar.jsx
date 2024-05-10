@@ -1,9 +1,20 @@
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 
 function Modal({ onClose }) {
+    const handleSignOut = () => {
+        // Clear local storage
+        toast.success('Logging you out!!');
+        localStorage.clear();
+        setTimeout(() => {
+            window.location.reload(); // Refresh the page after 1 second
+          }, 1000);
+        onClose();  
+    };
+
     return (
         <div className="absolute inset-0 flex justify-end h-12 mt-20 mr-5 z-10">
-            <button onClick={onClose} className="bg-red-500 flex items-center hover:bg-red-600 text-white text-xl py-4 px-4 rounded ">Sign Out</button>
+            <button onClick={handleSignOut} className="bg-red-500 flex items-center hover:bg-red-600 text-white text-xl py-4 px-4 rounded ">Sign Out</button>
         </div>
     );
 }
@@ -40,7 +51,7 @@ const Navbar = ({ toggleSidebar }) => {
                         </svg>
                     </button>
                     My Tasks
-                    </div>
+                </div>
                 <div className='mr-5 flex items-center'>
                     <div className='mr-4 w-10 h-10 lg:w-12 lg:h-12 bg-[#2568ef] text-lg lg:text-2xl rounded-full flex justify-center items-center'>
                         S

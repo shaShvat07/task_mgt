@@ -4,7 +4,6 @@ import { Navbar, Sidebar, Main } from '..';
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
-
   // Handle window resize event
   useEffect(() => {
     const handleResize = () => setDeviceWidth(window.innerWidth);

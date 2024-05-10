@@ -1,9 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LandingPage from '../LandingPage/LandingPage';
 import Dashboard from '../Dashboard/Dashboard';
+import axios from 'axios';
 
 const Home = () => {
-  const Auth = true;
+  const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      axios.get('http://localhost:3000/auth', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (response.data === "ok") {
+            setAuth(true); // Token is valid
+          } else {
+            setAuth(false); // Token is not valid
+          }
+        })
+        .catch(error => {
+          console.error('Error validating token:', error);
+          setAuth(false); // Error occurred, token is considered invalid
+        });
+    } else {
+      setAuth(false); // No token found, user is not authenticated
+    }
+  }, []);
+
   const [bgColor, setBgColor] = useState('bg-white');
   const handleButton1Hover = () => {
     setBgColor('bg-fuchsia-500');
@@ -14,8 +41,8 @@ const Home = () => {
   };
 
   return (
-    <div  className='h-full'>
-      {Auth ? <Dashboard /> :
+    <div className='h-full'>
+      {auth ? <Dashboard /> :
         <>
           <div className={`w-full ${bgColor} h-16 flex text-2xl`}>
             <a

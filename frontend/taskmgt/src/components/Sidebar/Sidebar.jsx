@@ -1,22 +1,36 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
+import axios from 'axios';
 
-const commonList = [
-    { id: 1, label: 'List 1', imgSrc: '/planner.svg' },
-    { id: 2, label: 'List 2', imgSrc: '/planner.svg' },
-    { id: 3, label: 'List 3', imgSrc: '/planner.svg' },
-    { id: 4, label: 'List 4', imgSrc: '/planner.svg' },
-];
-
-function ListItem({ label, imgSrc }) {
+function ListItem({ label }) {
     return (
-        <li className='flex w-full justify-center p-3 hover:cursor-pointer hover:bg-gray-800'>
-            <img src={imgSrc} alt='icon' className='ml-5' />
+        <>
+            <img src='/planner.svg' alt='icon' className='ml-5' />
             <div className='w-4/5 ml-4'>{label}</div>
-        </li>
+        </>
     );
 }
 
 const Sidebar = () => {
+    const [lists, setLists] = useState([]);
+    useEffect(() => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        // Fetch all lists
+        axios.get('http://localhost:3000/lists/', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(response => {
+            setLists(response.data);
+          })
+          .catch(error => {
+            console.error('Error fetching lists:', error);
+          });
+      }
+    }, []);
+    // console.log(lists);
     return (
         <>
             <div className='sticky lg:w-1/5 left-0 h-100vh top-0 border-r border-gray-500'>
@@ -63,9 +77,11 @@ const Sidebar = () => {
                         </div>
                         <div>
                             <ul className='flex-row w-full'>
-                                {commonList.map(item => (
-                                    <ListItem key={item.id} label={item.label} imgSrc={item.imgSrc} />
-                                ))}
+                                <li className='flex w-full justify-center p-3 hover:cursor-pointer hover:bg-gray-800'>
+                                    {lists && lists.length > 0 && lists.map(item => (
+                                        <ListItem key={item.list_id} label={item.title} />
+                                    ))}
+                                </li>
                             </ul>
                         </div>
                         <div className='absolute bottom-2 flex items-center justify-center w-full'>
