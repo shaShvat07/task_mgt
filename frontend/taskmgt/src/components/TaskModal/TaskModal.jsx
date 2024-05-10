@@ -1,29 +1,41 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
-const TaskModal = ({ showModal, setShowModal }) => {
-    // const [showModal, setShowModal] = useState(false);
-    const [taskName, setTaskName] = useState('');
-    const [dueDate, setDueDate] = useState('');
-    const [priority, setPriority] = useState('');
-    const [status, setStatus] = useState('Not Done');
-    const [description, setDescription] = useState('');
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // Convert dueDate to DateTime format
-        const dueDateInDateTimeFormat = new Date(`${dueDate}T00:00:00`);
-        setShowModal(false);
-        // Handle form submission here
-        console.log({ taskName, dueDateInDateTimeFormat, priority, status, description });
-    };
-
+const TaskModal = ({ showModal, setShowModal, handleSubmit, handleInputChange, formData, listId }) => {
     const minDate = new Date().toISOString().split('T')[0];
+
+    const submitTask = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('token');
+
+            if (listId === -1) {
+                toast.error('Please create a list first.');
+                return;
+            }
+
+            const response = await axios.post(`http://localhost:3000/lists/${listId}/tasks`, formData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            toast.success('Task added successfully');
+            setShowModal(false);
+            handleSubmit(response.data); // Pass the new task data to the parent component
+        } catch (error) {
+            toast.error('Error adding task!');
+            console.error('Error adding task:', error.response.data);
+        }
+    };
 
     return (
         <>
             {showModal ? (
                 <>
-                    <div className="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm" style={{width: '100vw'}}></div>
+                    <div className="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm" style={{ width: '100vw' }}></div>
                     <div
                         className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden flex items-center justify-center"
                         onClick={() => setShowModal(false)}
@@ -58,41 +70,41 @@ const TaskModal = ({ showModal, setShowModal }) => {
                                         <span className="sr-only">Close modal</span>
                                     </button>
                                 </div>
-                                <form onSubmit={handleSubmit}>
+                                <form onSubmit={submitTask}>
                                     <div className="grid gap-4 mb-4 sm:grid-cols-2">
                                         <div>
                                             <label
-                                                htmlFor="taskName"
+                                                htmlFor="title"
                                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                             >
                                                 Task
                                             </label>
                                             <input
                                                 type="text"
-                                                name="taskName"
-                                                id="taskName"
+                                                name="title"
+                                                id="title"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                 placeholder="Type task name"
                                                 required
-                                                value={taskName}
-                                                onChange={(e) => setTaskName(e.target.value)}
+                                                value={formData.title}
+                                                onChange={handleInputChange}
                                             />
                                         </div>
                                         <div>
                                             <label
-                                                htmlFor="dueDate"
+                                                htmlFor="deadline"
                                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                             >
                                                 Due Date
                                             </label>
                                             <input
                                                 type="date"
-                                                name="dueDate"
-                                                id="dueDate"
+                                                name="deadline"
+                                                id="deadline"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                 required
-                                                value={dueDate}
-                                                onChange={(e) => setDueDate(e.target.value)}
+                                                value={formData.deadline}
+                                                onChange={handleInputChange}
                                                 min={minDate}
                                             />
                                         </div>
@@ -105,14 +117,15 @@ const TaskModal = ({ showModal, setShowModal }) => {
                                             </label>
                                             <select
                                                 id="priority"
+                                                name="priority"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                value={priority}
-                                                onChange={(e) => setPriority(e.target.value)}
+                                                value={formData.priority}
+                                                onChange={handleInputChange}
                                             >
                                                 <option value="">Select priority</option>
-                                                <option value="High Priority">High Priority</option>
-                                                <option value="Medium Priority">Medium Priority</option>
-                                                <option value="Low Priority">Low Priority</option>
+                                                <option value="High">High Priority</option>
+                                                <option value="Medium">Medium Priority</option>
+                                                <option value="Low">Low Priority</option>
                                             </select>
                                         </div>
                                         <div>
@@ -124,28 +137,30 @@ const TaskModal = ({ showModal, setShowModal }) => {
                                             </label>
                                             <select
                                                 id="status"
+                                                name="status"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                value={status}
-                                                onChange={(e) => setStatus(e.target.value)}
+                                                value={formData.status}
+                                                onChange={handleInputChange}
                                             >
-                                                <option value="Not Done">Not Done</option>
-                                                {/* Add more options as needed */}
+                                                <option value={false}>Not Done</option>
+                                                {/* <option value={true}>Done</option> */}
                                             </select>
                                         </div>
                                         <div className="sm:col-span-2">
                                             <label
-                                                htmlFor="description"
+                                                htmlFor="content"
                                                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                                             >
                                                 Description
                                             </label>
                                             <textarea
-                                                id="description"
+                                                id="content"
+                                                name="content"
                                                 rows="4"
                                                 className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                 placeholder="Write task description here"
-                                                value={description}
-                                                onChange={(e) => setDescription(e.target.value)}
+                                                value={formData.content}
+                                                onChange={handleInputChange}
                                             ></textarea>
                                         </div>
                                     </div>

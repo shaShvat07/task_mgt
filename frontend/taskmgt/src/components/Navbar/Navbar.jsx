@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
+import axios from 'axios';
 
 function Modal({ onClose }) {
     const handleSignOut = () => {
@@ -19,9 +20,28 @@ function Modal({ onClose }) {
     );
 }
 
-const Navbar = ({ toggleSidebar }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+const Navbar = ({ toggleSidebar, selectedList  }) => {
+    const [user, setUser] = useState('');
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            // Fetch user
+            axios.get('http://localhost:3000/user', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    setUser(response.data);
+                })
+                .catch(error => {
+                    console.error('Error fetching users:', error);
+                });
+        }
+    }, []);
 
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const handleImageClick = () => {
         setIsModalOpen(!isModalOpen);
     };
@@ -50,14 +70,14 @@ const Navbar = ({ toggleSidebar }) => {
                             />
                         </svg>
                     </button>
-                    My Tasks
+                    {selectedList.label}
                 </div>
                 <div className='mr-5 flex items-center'>
                     <div className='mr-4 w-10 h-10 lg:w-12 lg:h-12 bg-[#2568ef] text-lg lg:text-2xl rounded-full flex justify-center items-center'>
-                        S
+                        {user?.data?.first_name.charAt(0).toUpperCase()}
                     </div>
-                    <div className='text-2xs lg:text-xl lg:mr-4'>
-                        Shashvat Patel
+                    <div className='text-2xs lg:text-xl mr-2 lg:mr-4'>
+                        {user?.data?.first_name + ' ' + user?.data?.last_name}
                     </div>
                     <div>
                         <img src="/down-arrow.svg" alt="Dropdown" className={`hover: cursor-pointer transform transition-transform ease-in-out duration-500 ${isModalOpen ? 'rotate-180' : ''}`} onClick={handleImageClick} />

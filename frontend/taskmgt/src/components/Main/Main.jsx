@@ -1,29 +1,69 @@
 import React, { useState, useEffect } from 'react';
 import { Card, TaskModal } from '..';
 import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import moment from 'moment';
 
-const Main = () => {
+const Main = ({ selectedList }) => {
   const [tasks, setTasks] = useState([]);
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+    priority: '',
+    status: false,
+    deadline: null,
+  });
+  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      // Fetch all tasks
-      axios.get('http://localhost:3000/mytask/tasks', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(response => {
+      const fetchTasks = async () => {
+        try {
+          let response;
+          if (selectedList.listId === -1) {
+            response = await axios.get('http://localhost:3000/mytask/tasks', {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            });
+          } else {
+            response = await axios.get(`http://localhost:3000/lists/${selectedList.listId}/tasks`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            });
+          }
           setTasks(response.data);
-        })
-        .catch(error => {
+        } catch (error) {
           console.error('Error fetching tasks:', error);
-        });
+        }
+      };
+      fetchTasks();
     }
-  }, []);
+  }, [selectedList.listId]);
 
-  console.log(tasks);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (newTask) => {
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+    setFormData({
+      title: '',
+      content: '',
+      priority: '',
+      status: false,
+      deadline: null,
+    });
+  };
+
   const [isActionsDropdownOpen, setIsActionsDropdownOpen] = useState(false);
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
 
@@ -35,12 +75,17 @@ const Main = () => {
     setIsFilterDropdownOpen(!isFilterDropdownOpen);
   };
 
-  const [showModal, setShowModal] = useState(false);
-
   return (
     <>
-      <div className='h-full w-full overflow-y-scroll'>
-        <TaskModal showModal={showModal} setShowModal={setShowModal} />
+      <div className="h-full w-full overflow-y-scroll">
+        <TaskModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          handleSubmit={handleSubmit}
+          handleInputChange={handleInputChange}
+          formData={formData}
+          listId={selectedList.listId}
+        />
         <section class="flex items-start mt-5">
           <div class="max-w-screen-xl px-4 mx-auto lg:px-12 w-full">
             <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
@@ -202,11 +247,12 @@ const Main = () => {
             </div>
           </div>
         </section>
-
         <div className='mb-20 w-full relative flex justify-evenly items-start flex-wrap' style={{ height: 'fit-content' }}>
-          {tasks && tasks.length > 0 && tasks.map(item => (
-            <Card item={item} />
-          ))}
+          {tasks && tasks.length > 0 ? (
+            tasks.map((item) => <Card key={item.taskId} item={item} />)
+          ) : (
+            <p>No tasks found.</p>
+          )}
         </div>
       </div >
     </>

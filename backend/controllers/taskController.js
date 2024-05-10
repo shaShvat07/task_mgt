@@ -85,13 +85,15 @@ exports.getAllTask = async (req, res) => {
         }
 
         const tasks = [];
-        for (const taskId of list.tasks) {
-            const task = await TaskService.getTaskById(taskId);
-            if (task) {
-                tasks.push(task); // Add task to the tasks array
+        if(list.tasks){
+            for (const taskId of list.tasks) {
+                const task = await TaskService.getTaskById(taskId);
+                if (task) {
+                    tasks.push(task);
+                }
             }
         }
-        res.json(tasks); // Send the tasks array as a response
+        res.json(tasks);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Server Error" });
