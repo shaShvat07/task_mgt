@@ -9,7 +9,7 @@ const commonList = [
 
 function ListItem({ label, imgSrc }) {
     return (
-        <li className='flex w-full justify-center p-3 hover:cursor-pointer'>
+        <li className='flex w-full justify-center p-3 hover:cursor-pointer hover:bg-gray-800'>
             <img src={imgSrc} alt='icon' className='ml-5' />
             <div className='w-4/5 ml-4'>{label}</div>
         </li>
@@ -43,19 +43,19 @@ const Sidebar = () => {
                         </div>
                         <div>
                             <ul className='flex-row w-full border-b border-gray-500'>
-                                <li className='flex w-full justify-center mt-5 bg-gray-800 p-3 hover:cursor-pointer'>
+                                <li className='hover:bg-gray-800 flex w-full justify-center mt-5 bg-gray-800 p-3 hover:cursor-pointer'>
                                     <img src='/home.svg' className='ml-5' />
                                     <div className='w-4/5 ml-4'>My Tasks </div>
                                 </li>
-                                <li className='flex w-full justify-center p-3 hover:cursor-pointer'>
+                                <li className='hover:bg-gray-800 flex w-full justify-center p-3 hover:cursor-pointer'>
                                     <img src='/sun.svg' className='ml-5' />
                                     <div className='w-4/5 ml-4'> My Day </div>
                                 </li>
-                                <li className='flex w-full justify-center p-3 hover:cursor-pointer'>
+                                <li className='hover:bg-gray-800 flex w-full justify-center p-3 hover:cursor-pointer'>
                                     <img src='/planner.svg' className='ml-5' />
                                     <div className='w-4/5 ml-4'> Planned </div>
                                 </li>
-                                <li className='flex w-full justify-center mb-5 p-3 hover:cursor-pointer'>
+                                <li className='hover:bg-gray-800 flex w-full justify-center  p-3 hover:cursor-pointer'>
                                     <img src='/star.svg' className='ml-5' />
                                     <div className='w-4/5 ml-4'> Important </div>
                                 </li>

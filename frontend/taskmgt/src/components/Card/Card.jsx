@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react';
+import { UpdateTaskModal } from '..';
 
 const Card = () => {
+    const [showModal, setShowModal] = useState(false);
     return (
         <>
             <div className='w-[90%] h-48 md:w-64 lg:w-80 lg:h-64 bg-gray-800 rounded-lg  relative mt-5'>
@@ -19,9 +21,14 @@ const Card = () => {
                     So basically I have to do random things like lorem ipsum mf what the hell are u doing!
                 </div>
                 <div className='flex bottom-2 right-2 absolute'>
-                    <img src="/edit.svg" />
-                    <img src="/delete.svg" />
+                    <button className="hover:cursor-pointer" onClick={() => setShowModal(true)} >
+                        <img src="/edit.svg" />
+                    </button>
+                    <button className="hover:cursor-pointer">
+                        <img src="/delete.svg" />
+                    </button>
                 </div>
+                <UpdateTaskModal showModal={showModal} setShowModal={setShowModal} />
             </div>
         </>
     )

@@ -18,6 +18,8 @@ const Main = () => {
   return (
     <>
       <div className='h-full w-full overflow-y-scroll'>
+      <TaskModal showModal={showModal} setShowModal={setShowModal} />
+
         <section class="flex items-start mt-5">
           <div class="max-w-screen-xl px-4 mx-auto lg:px-12 w-full">
             <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
@@ -42,9 +44,6 @@ const Main = () => {
                     </svg>
                     Add Task
                   </button>
-                  
-                  <TaskModal showModal={showModal} setShowModal={setShowModal} />
-
                   <div className="flex items-center w-full space-x-3 md:w-auto">
                     <button
                       id="actionsDropdownButton"
