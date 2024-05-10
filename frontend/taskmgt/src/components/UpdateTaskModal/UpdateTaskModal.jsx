@@ -23,7 +23,7 @@ const UpdateTaskModal = ({ showModal, setShowModal, item, listId }) => {
                 deadline: dueDateInDateTimeFormat,
             };
 
-            await axios.patch(`http://localhost:3000/lists/${listId}/tasks/${item.task_id}`, updatedTask, {
+            await axios.patch(`https://task-mgt-three.vercel.app/lists/${listId}/tasks/${item.task_id}`, updatedTask, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Make sure the token is correctly formatted
                     'Content-Type': 'application/json',

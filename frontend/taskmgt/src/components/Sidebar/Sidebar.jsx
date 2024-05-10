@@ -12,7 +12,7 @@ function ListItem({ label, listId, onSelect }) {
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3000/lists/${listId}`, {
+            await axios.delete(`https://task-mgt-three.vercel.app/lists/${listId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ const Sidebar = ({ onListSelect }) => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.post('http://localhost:3000/lists', {
+            const response = await axios.post('https://task-mgt-three.vercel.app/lists', {
                 title
             }, {
                 headers: {
@@ -74,7 +74,7 @@ const Sidebar = ({ onListSelect }) => {
         const token = localStorage.getItem('token');
         if (token) {
             // Fetch all lists
-            axios.get('http://localhost:3000/lists/', {
+            axios.get('https://task-mgt-three.vercel.app/lists/', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'

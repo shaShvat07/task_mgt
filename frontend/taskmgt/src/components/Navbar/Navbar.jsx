@@ -26,7 +26,7 @@ const Navbar = ({ toggleSidebar, selectedList  }) => {
         const token = localStorage.getItem('token');
         if (token) {
             // Fetch user
-            axios.get('http://localhost:3000/user', {
+            axios.get('https://task-mgt-three.vercel.app/user', {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json'

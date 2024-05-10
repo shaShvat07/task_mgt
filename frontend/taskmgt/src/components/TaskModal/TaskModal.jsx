@@ -15,7 +15,7 @@ const TaskModal = ({ showModal, setShowModal, handleSubmit, handleInputChange, f
                 return;
             }
 
-            const response = await axios.post(`http://localhost:3000/lists/${listId}/tasks`, formData, {
+            const response = await axios.post(`https://task-mgt-three.vercel.app/lists/${listId}/tasks`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',

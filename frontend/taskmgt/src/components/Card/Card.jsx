@@ -25,7 +25,7 @@ const Card = ({ item, listId }) => {
     const handleDelete = async () => {
         try {
             const token = localStorage.getItem('token');
-            await axios.delete(`http://localhost:3000/lists/${listId}/tasks/${item.task_id}`,{
+            await axios.delete(`https://task-mgt-three.vercel.app/lists/${listId}/tasks/${item.task_id}`,{
                 headers: {
                     Authorization: `Bearer ${token}`, // Make sure the token is correctly formatted
                     'Content-Type': 'application/json',

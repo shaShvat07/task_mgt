@@ -9,7 +9,7 @@ const Home = () => {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      axios.get('http://localhost:3000/auth', {
+      axios.get('https://task-mgt-three.vercel.app/auth', {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'

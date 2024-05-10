@@ -12,7 +12,7 @@ const SignUp = () => {
     e.preventDefault();
 
     // Send signup request
-    axios.post('http://localhost:3000/register', {
+    axios.post('https://task-mgt-three.vercel.app/register', {
       first_name,
       last_name,
       email,

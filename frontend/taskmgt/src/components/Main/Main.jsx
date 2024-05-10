@@ -35,7 +35,7 @@ const Main = ({ selectedList }) => {
         try {
           let response;
           if (selectedList.listId === -1) {
-            response = await axios.get(`http://localhost:3000/mytask/tasks`, {
+            response = await axios.get(`https://task-mgt-three.vercel.app/mytask/tasks`, {
               headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const Main = ({ selectedList }) => {
             setTasks(response.data);
             setFilteredTasks(response.data);
           } else {
-            response = await axios.get(`http://localhost:3000/lists/${selectedList.listId}/tasks`, {
+            response = await axios.get(`https://task-mgt-three.vercel.app/lists/${selectedList.listId}/tasks`, {
               headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ const Main = ({ selectedList }) => {
     try {
       const token = localStorage.getItem('token');
       const response = await axios.post(
-        'http://localhost:3000/search', // Remove the backticks and dollar signs
+        'https://task-mgt-three.vercel.app/search', // Remove the backticks and dollar signs
         { query: searchQuery },
         {
           headers: {

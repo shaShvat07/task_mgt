@@ -13,7 +13,7 @@ const Login = () => {
     try {
       console.log(email);
       console.log(password);
-      const response = await axios.post('http://localhost:3000/login', {
+      const response = await axios.post('https://task-mgt-three.vercel.app/login', {
         email,
         password
       });
