@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Navbar, Sidebar, Main } from '..';
 
 const Dashboard = () => {
-  const [selectedList, setSelectedList] = useState({ label: 'My Tasks', listId: 0 });
+  const [selectedList, setSelectedList] = useState({ label: 'My Tasks', listId: -1 });
 
   const handleListSelect = ({ label, listId }) => {
     setSelectedList({ label, listId });

@@ -134,11 +134,10 @@ exports.updateTask = async (req, res) => {
         if (!task) {
             return res.status(404).json({ message: "Task not found" });
         }
-
         if (task.user_id != user_id) {
             return res.status(401).json({ message: "Unauthorized" });
         }
-        if (task.list_id != list_id) {
+        if (list_id != -1 && task.list_id != list_id ) {
             return res.status(404).json({ message: "Task not found in the list" });
         }
 
@@ -182,7 +181,7 @@ exports.deleteTask = async (req, res) => {
         if (task.user_id != user_id) {
             return res.status(401).json({ message: "Unauthorized" });
         }
-        if (task.list_id != list_id) {
+        if (list_id != -1 && task.list_id != list_id ) {
             return res.status(404).json({ message: "Task not found in the list" });
         }
         await UserService.removeTaskFromUser(taskId);

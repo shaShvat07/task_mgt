@@ -1,20 +1,44 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import moment from 'moment';
 
-const UpdateTaskModal = ({ showModal, setShowModal }) => {
-    // const [showModal, setShowModal] = useState(false);
-    const [taskName, setTaskName] = useState('');
-    const [dueDate, setDueDate] = useState('');
-    const [priority, setPriority] = useState('');
-    const [status, setStatus] = useState('Not Done');
-    const [description, setDescription] = useState('');
+const UpdateTaskModal = ({ showModal, setShowModal, item, listId }) => {
+    const [taskName, setTaskName] = useState(item.title);
+    const [dueDate, setDueDate] = useState(item.deadline ? moment(item.deadline).format('YYYY-MM-DD') : '');
+    const [priority, setPriority] = useState(item.priority);
+    const [status, setStatus] = useState(item.status ? 'Done' : 'Not Done');
+    const [description, setDescription] = useState(item.content);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Convert dueDate to DateTime format
-        const dueDateInDateTimeFormat = new Date(`${dueDate}T00:00:00`);
-        setShowModal(false);
-        // Handle form submission here
-        console.log({ taskName, dueDateInDateTimeFormat, priority, status, description });
+        try {
+            const dueDateInDateTimeFormat = dueDate ? new Date(`${dueDate}T00:00:00`) : null;
+            const token = localStorage.getItem('token');
+            const updatedTask = {
+                title: taskName,
+                content: description,
+                priority: priority,
+                status: status === 'Done', // Convert status to boolean
+                deadline: dueDateInDateTimeFormat,
+            };
+
+            await axios.patch(`http://localhost:3000/lists/${listId}/tasks/${item.task_id}`, updatedTask, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Make sure the token is correctly formatted
+                    'Content-Type': 'application/json',
+                },
+            });
+            toast.success('Task updated successfully');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+            
+            setShowModal(false);
+        } catch (error) {
+            console.error('Error updating task:', error);
+            toast.error('Failed to update task');
+        }
     };
 
     const minDate = new Date().toISOString().split('T')[0];
@@ -73,7 +97,7 @@ const UpdateTaskModal = ({ showModal, setShowModal }) => {
                                                 id="taskName"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                 placeholder="Type task name"
-                                                required
+
                                                 value={taskName}
                                                 onChange={(e) => setTaskName(e.target.value)}
                                             />
@@ -90,7 +114,7 @@ const UpdateTaskModal = ({ showModal, setShowModal }) => {
                                                 name="dueDate"
                                                 id="dueDate"
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                                required
+
                                                 value={dueDate}
                                                 onChange={(e) => setDueDate(e.target.value)}
                                                 min={minDate}
@@ -108,12 +132,12 @@ const UpdateTaskModal = ({ showModal, setShowModal }) => {
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                 value={priority}
                                                 onChange={(e) => setPriority(e.target.value)}
-                                                required
+
                                             >
                                                 <option value="">Select priority</option>
-                                                <option value="High Priority">High Priority</option>
-                                                <option value="Medium Priority">Medium Priority</option>
-                                                <option value="Low Priority">Low Priority</option>
+                                                <option value="High">High Priority</option>
+                                                <option value="Medium">Medium Priority</option>
+                                                <option value="Low">Low Priority</option>
                                             </select>
                                         </div>
                                         <div>
@@ -128,7 +152,7 @@ const UpdateTaskModal = ({ showModal, setShowModal }) => {
                                                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                                                 value={status}
                                                 onChange={(e) => setStatus(e.target.value)}
-                                                required
+
                                             >
                                                 <option value="Not Done"> Not Done</option>
                                                 <option value="Done"> Done</option>

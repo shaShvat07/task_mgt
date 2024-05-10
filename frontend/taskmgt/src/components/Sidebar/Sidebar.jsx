@@ -9,11 +9,30 @@ function ListItem({ label, listId, onSelect }) {
         onSelect({ label, listId });
     };
 
+    const handleDelete = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            await axios.delete(`http://localhost:3000/lists/${listId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            toast.success('List deleted successfully');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        } catch (error) {
+            console.error('Error deleting list:', error);
+            toast.error('Failed to delete list');
+        }
+    };
     return (
         <li className={`flex w-full justify-center p-3 hover:cursor-pointer hover:bg-gray-800`}
             onClick={handleClick}>
             <img src='/planner.svg' alt='icon' className='ml-5' />
             <div className='w-4/5 ml-4'>{label}</div>
+            {listId !== -1 && <img src='/delete.svg' onClick={handleDelete} />}
         </li>
     );
 }
@@ -101,7 +120,7 @@ const Sidebar = ({ onListSelect }) => {
                                     listId={-1}
                                     onSelect={onListSelect}
                                 />
-                                <ListItem
+                                {/* <ListItem
                                     label="My Day"
                                     listId={-1}
                                     onSelect={onListSelect}
@@ -115,7 +134,7 @@ const Sidebar = ({ onListSelect }) => {
                                     label="Important"
                                     listId={-1}
                                     onSelect={onListSelect}
-                                />
+                                /> */}
                             </ul>
                         </div>
                         <div>
