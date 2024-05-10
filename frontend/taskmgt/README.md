@@ -1,8 +1,65 @@
-# React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# TaskMgt - FRONTEND
 
-Currently, two official plugins are available:
+## Project Structure
+The project is structured as follows, ensuring modular and organized management of various functionalities.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+src
+    ├───index.css
+    ├───Components
+    │   ├───Card
+    │   ├───Dashboard
+    │   ├───Home
+    │   ├───Login
+    │   ├───LandingPage
+    │   ├───Main
+    │   ├───Navbar
+    │   ├───PageNotFound
+    │   ├───Sidebar
+    │   ├───SignUp
+    │   ├───TaskModal
+    │   ├───UpdateTaskModal
+    │   ├───App.jsx
+    │   ├───index.js
+    └───main.jsx
+```
+## Setup and Installation
+
+Setup
+```bash
+Clone the Repository by running this command 
+git clone https://github.com/shaShvat07/task_mgt.git
+cd frontend 
+cd taskmgt
+```
+
+Installating Dependencies
+```bash
+npm i
+```
+
+Run the Application
+```bash
+npm run dev
+```
+Link to the deployed website 
+```bash
+https://task-mgt-pro.vercel.app
+```
+## Routes
+
+* ```/ ``` - Home Page / Landing Page
+* ```/login ``` - Login Page
+* ```/register ``` - Signup Page
+
+## Features
+
+- ```Authentication:``` Implemented secure user authentication using JWT Token for enhanced security.
+- ```Task Management:``` Users can perform CRUD operations on tasks, enabling them to create, read, update, and delete tasks effortlessly.
+- ```List Management:``` Users can organize tasks by creating lists, enhancing task management capabilities.
+- ```Filtering Options:``` Convenient filtering options enable users to classify tasks based on priority, due dates, or other custom criteria.
+- ```Mobile-Friendly UI:``` The application boasts a responsive design, ensuring optimal user experience across various devices and screen sizes.
+- ```Notifications:``` Integrated notification feature using react-toast for timely reminders and updates.
+- ```Deployment:``` The application is deployed on Vercel, ensuring accessibility online.
+
