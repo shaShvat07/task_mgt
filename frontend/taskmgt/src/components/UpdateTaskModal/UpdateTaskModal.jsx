@@ -19,7 +19,7 @@ const UpdateTaskModal = ({ showModal, setShowModal, item, listId }) => {
                 title: taskName,
                 content: description,
                 priority: priority,
-                status: status === 'Done', // Convert status to boolean
+                status: status == 'Done', // Convert status to boolean
                 deadline: dueDateInDateTimeFormat,
             };
 
