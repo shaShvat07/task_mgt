@@ -9,7 +9,7 @@ const Dashboard = () => {
     setSelectedList({ label, listId });
   };
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [deviceWidth, setDeviceWidth] = useState(window.innerWidth);
   // Handle window resize event
   useEffect(() => {
@@ -22,6 +22,9 @@ const Dashboard = () => {
   const isSidebarVisible = deviceWidth >= 768; // Adjust the breakpoint as needed
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const handleChildData = (data) => {
+    setIsSidebarOpen(data);
+  };
 
   return (
     <>
@@ -43,7 +46,7 @@ const Dashboard = () => {
               className="absolute left-0 top-0 h-full w-4/5 max-w-xs bg-gray-800 shadow-lg"
               onClick={(e) => e.stopPropagation()}
             >
-              <Sidebar onListSelect={handleListSelect} />
+              <Sidebar onListSelect={handleListSelect} toggleSidebar={handleChildData} />
             </div>
           </div>
         )}

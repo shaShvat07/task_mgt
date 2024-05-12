@@ -7,11 +7,11 @@ const UpdateTaskModal = ({ showModal, setShowModal, item, listId }) => {
     const [taskName, setTaskName] = useState(item.title);
     const [dueDate, setDueDate] = useState(item.deadline ? moment(item.deadline).format('YYYY-MM-DD') : '');
     const [priority, setPriority] = useState(item.priority);
-    const [status, setStatus] = useState(item.status ? 'Done' : 'Not Done');
+    const [status, setStatus] = useState(item.status ? 'Not Done' : 'Done');
     const [description, setDescription] = useState(item.content);
-
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
             const dueDateInDateTimeFormat = dueDate ? new Date(`${dueDate}T00:00:00`) : null;
             const token = localStorage.getItem('token');
@@ -19,11 +19,10 @@ const UpdateTaskModal = ({ showModal, setShowModal, item, listId }) => {
                 title: taskName,
                 content: description,
                 priority: priority,
-                status: status == 'Done', // Convert status to boolean
+                status: status, 
                 deadline: dueDateInDateTimeFormat,
             };
-
-            await axios.patch(`https://task-mgt-three.vercel.app/lists/${listId}/tasks/${item.task_id}`, updatedTask, {
+            await axios.patch(`https://task-mgt-three.vercel.app/lists/${item.list_id}/tasks/${item.task_id}`, updatedTask, {
                 headers: {
                     Authorization: `Bearer ${token}`, // Make sure the token is correctly formatted
                     'Content-Type': 'application/json',
@@ -33,7 +32,7 @@ const UpdateTaskModal = ({ showModal, setShowModal, item, listId }) => {
             setTimeout(() => {
                 window.location.href = '/';
             }, 1000);
-            
+
             setShowModal(false);
         } catch (error) {
             console.error('Error updating task:', error);

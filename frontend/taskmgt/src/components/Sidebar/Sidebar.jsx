@@ -3,10 +3,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
-function ListItem({ label, listId, onSelect }) {
+function ListItem({ label, listId, onSelect, toggleSidebar }) {
 
     const handleClick = () => {
         onSelect({ label, listId });
+        toggleSidebar(false);
     };
 
     const handleDelete = async () => {
@@ -37,7 +38,7 @@ function ListItem({ label, listId, onSelect }) {
     );
 }
 
-const Sidebar = ({ onListSelect }) => {
+const Sidebar = ({ onListSelect, toggleSidebar }) => {
     const [lists, setLists] = useState([]);
     const [title, setListName] = useState('');
     const [err, setError] = useState('');
@@ -119,6 +120,7 @@ const Sidebar = ({ onListSelect }) => {
                                     label="My Tasks"
                                     listId={-1}
                                     onSelect={onListSelect}
+                                    toggleSidebar={toggleSidebar}
                                 />
                                 {/* <ListItem
                                     label="My Day"
@@ -144,6 +146,7 @@ const Sidebar = ({ onListSelect }) => {
                                         key={item.list_id}
                                         label={item.title}
                                         listId={item.list_id}
+                                        toggleSidebar={toggleSidebar}
                                         onSelect={onListSelect} />
                                 ))}
                             </ul>
