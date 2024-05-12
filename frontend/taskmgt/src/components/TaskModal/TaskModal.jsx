@@ -11,7 +11,7 @@ const TaskModal = ({ showModal, setShowModal, handleSubmit, handleInputChange, f
             const token = localStorage.getItem('token');
 
             if (listId === -1) {
-                toast.error('Please create a list first.');
+                toast.error('Please create/select a list first.');
                 return;
             }
 
